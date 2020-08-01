@@ -115,6 +115,7 @@ function usage()
 	echo ""
 }
 
+CFLAGS="-lucp -lucs -I/global/home/users/ziyi/ucx-source/install/include -L/global/home/users/ziyi/ucx-source/install/lib -Wl,-rpath,/global/home/users/ziyi/ucx-source/install/lib"
 # Load default values
 # Convert config to sourcable configuration file
 sed -r 's/CONFIG_([[:alnum:]_]+)=(.*)/CONFIG[\1]=\2/g' $rootdir/CONFIG > $rootdir/CONFIG.sh

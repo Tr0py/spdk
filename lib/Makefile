@@ -31,6 +31,7 @@
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+CFLAGS += -lucp -lucs -I/global/home/users/ziyi/ucx-source/install/include -L/global/home/users/ziyi/ucx-source/install/lib -Wl,-rpath,/global/home/users/ziyi/ucx-source/install/lib
 SPDK_ROOT_DIR := $(abspath $(CURDIR)/..)
 include $(SPDK_ROOT_DIR)/mk/spdk.common.mk
 include $(SPDK_ROOT_DIR)/mk/spdk.lib_deps.mk

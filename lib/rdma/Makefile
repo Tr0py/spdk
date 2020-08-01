@@ -39,6 +39,7 @@ SO_MINOR := 0
 
 SPDK_MAP_FILE = $(abspath $(CURDIR)/spdk_rdma.map)
 
+CFLAGS += -lucp -lucs -I/global/home/users/ziyi/ucx-source/install/include -L/global/home/users/ziyi/ucx-source/install/lib -Wl,-rpath,/global/home/users/ziyi/ucx-source/install/lib
 LIBNAME = rdma
 
 ifeq ($(CONFIG_RDMA_PROV),verbs)
@@ -50,7 +51,7 @@ else
 $(error Wrong RDMA provider specified: $(CONFIG_RDMA_PROV))
 endif
 
-LOCAL_SYS_LIBS += -libverbs -lrdmacm
+LOCAL_SYS_LIBS += -libverbs -lrdmacm 
 #Attach only if FreeBSD and RDMA is specified with configure
 ifeq ($(OS),FreeBSD)
 # Mellanox - MLX4 HBA Userspace Library

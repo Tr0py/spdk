@@ -34,6 +34,8 @@
 SPDK_ROOT_DIR := $(abspath $(CURDIR)/..)
 include $(SPDK_ROOT_DIR)/mk/spdk.common.mk
 
+CFLAGS += -lucp -lucs -I/global/home/users/ziyi/ucx-source/install/include -L/global/home/users/ziyi/ucx-source/install/lib -Wl,-rpath,/global/home/users/ziyi/ucx-source/install/lib
+
 # These directories contain tests.
 TESTDIRS = app bdev blobfs cpp_headers env event nvme rpc_client
 

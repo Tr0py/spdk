@@ -37,6 +37,8 @@ include $(SPDK_ROOT_DIR)/mk/spdk.common.mk
 SO_VER := 5
 SO_MINOR := 0
 
+CFLAGS += -lucp -lucs -I/global/home/users/ziyi/ucx-source/install/include -L/global/home/users/ziyi/ucx-source/install/lib -Wl,-rpath,/global/home/users/ziyi/ucx-source/install/lib
+
 C_SRCS = ctrlr.c ctrlr_discovery.c ctrlr_bdev.c \
 	 subsystem.c nvmf.c nvmf_rpc.c transport.c tcp.c
 
