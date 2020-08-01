@@ -104,12 +104,12 @@
 #endif
 #define _print_func(x)\
 {\
-    static printed = 0;\
+    static int printed = 0;\
     if (printed == 0) {\
         fprintf(stderr, "--In %s--\n", #x);\
         printed = 1;\
     }\
-}\
+}
 
 /*
 #ifndef BACK_TRACE

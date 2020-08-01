@@ -46,6 +46,14 @@
 #include "spdk/util.h"
 #include "spdk/likely.h"
 #include "spdk_internal/sock.h"
+#define _print_func(x)\
+{\
+    static int printed = 0;\
+    if (printed == 0) {\
+        fprintf(stderr, "--In %s--\n", #x);\
+        printed = 1;\
+    }\
+}
 
 #define MAX_TMPBUF 1024
 #define PORTNUMLEN 32
@@ -292,6 +300,7 @@ posix_sock_set_recvbuf(struct spdk_sock *_sock, int sz)
 static int
 posix_sock_set_sendbuf(struct spdk_sock *_sock, int sz)
 {
+    _print_func(posix_sock_set_sendbuf);
 	struct spdk_posix_sock *sock = __posix_sock(_sock);
 	int rc;
 
@@ -566,18 +575,21 @@ retry:
 static struct spdk_sock *
 posix_sock_listen(const char *ip, int port, struct spdk_sock_opts *opts)
 {
+    _print_func(posix_sock_listen);
 	return posix_sock_create(ip, port, SPDK_SOCK_CREATE_LISTEN, opts);
 }
 
 static struct spdk_sock *
 posix_sock_connect(const char *ip, int port, struct spdk_sock_opts *opts)
 {
+    _print_func(posix_sock_connect);
 	return posix_sock_create(ip, port, SPDK_SOCK_CREATE_CONNECT, opts);
 }
 
 static struct spdk_sock *
 posix_sock_accept(struct spdk_sock *_sock)
 {
+    _print_func(posix_sock_accept);
 	struct spdk_posix_sock		*sock = __posix_sock(_sock);
 	struct sockaddr_storage		sa;
 	socklen_t			salen;
@@ -630,6 +642,7 @@ posix_sock_accept(struct spdk_sock *_sock)
 static int
 posix_sock_close(struct spdk_sock *_sock)
 {
+    _print_func(posix_sock_close);
 	struct spdk_posix_sock *sock = __posix_sock(_sock);
 
 	assert(TAILQ_EMPTY(&_sock->pending_reqs));
@@ -896,6 +909,7 @@ posix_sock_recv_from_pipe(struct spdk_posix_sock *sock, struct iovec *diov, int 
 static inline ssize_t
 posix_sock_read(struct spdk_posix_sock *sock)
 {
+    _print_func(posix_sock_read);
 	struct iovec iov[2];
 	int bytes;
 	struct spdk_posix_sock_group_impl *group;
@@ -920,6 +934,7 @@ posix_sock_read(struct spdk_posix_sock *sock)
 static ssize_t
 posix_sock_readv(struct spdk_sock *_sock, struct iovec *iov, int iovcnt)
 {
+    _print_func(posix_sock_readv);
 	struct spdk_posix_sock *sock = __posix_sock(_sock);
 	int rc, i;
 	size_t len;
@@ -953,6 +968,7 @@ posix_sock_readv(struct spdk_sock *_sock, struct iovec *iov, int iovcnt)
 static ssize_t
 posix_sock_recv(struct spdk_sock *sock, void *buf, size_t len)
 {
+    _print_func(posix_sock_recv);
 	struct iovec iov[1];
 
 	iov[0].iov_base = buf;
@@ -964,6 +980,7 @@ posix_sock_recv(struct spdk_sock *sock, void *buf, size_t len)
 static ssize_t
 posix_sock_writev(struct spdk_sock *_sock, struct iovec *iov, int iovcnt)
 {
+    _print_func(posix_sock_writev);
 	struct spdk_posix_sock *sock = __posix_sock(_sock);
 	int rc;
 
@@ -986,6 +1003,7 @@ posix_sock_writev(struct spdk_sock *_sock, struct iovec *iov, int iovcnt)
 static void
 posix_sock_writev_async(struct spdk_sock *sock, struct spdk_sock_request *req)
 {
+    _print_func(posix_sock_writev_async);
 	int rc;
 
 	spdk_sock_request_queue(sock, req);
