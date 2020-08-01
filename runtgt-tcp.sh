@@ -1,5 +1,7 @@
-[Transport]
-Type RDMA
+#!/bin/bash
+
+echo "[Transport]
+Type TCP
 MaxQueueDepth 256
 # number of queues in emulation configuration (JSON file) plus 2
 MaxQueuesPerSession 34
@@ -18,5 +20,7 @@ NQN nqn.2016-06.io.spdk.cnode:null0
 SN SPDK000DEADNULL0
 Namespace Nullb0 1
 Namespace Nullb1 2
-Listen RDMA 192.168.130.25:4420
-AllowAnyHost yes
+Listen TCP 192.168.130.$1:4420
+AllowAnyHost yes" > test.conf
+
+build/bin/spdk_tgt -m 0x0F -c ./test.conf

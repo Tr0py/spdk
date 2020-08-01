@@ -74,6 +74,69 @@
          ((*((uint8_t *)(B)+2)) = (uint8_t)((uint32_t)(D) >> 16)),              \
          ((*((uint8_t *)(B)+3)) = (uint8_t)((uint32_t)(D) >> 24)))
 
+#include <execinfo.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
+#if 0
+#define _print_trace();\
+{\
+  void *array[20];\
+  size_t size;\
+  char **strings;\
+  size_t i;\
+\
+  size = backtrace (array, 20);\
+  strings = backtrace_symbols (array, size);\
+\
+  printf ("Obtained %zd stack frames.\n", size);\
+\
+  for (i = 0; i < size; i++)\
+     printf ("%s\n", strings[i]);\
+\
+  free (strings);\
+}
+#else
+#define _print_trace();\
+{\
+}
+#endif
+#define _print_func(x)\
+{\
+    static printed = 0;\
+    if (printed == 0) {\
+        fprintf(stderr, "--In %s--\n", #x);\
+        printed = 1;\
+    }\
+}\
+
+/*
+#ifndef BACK_TRACE
+#define BACK_TRACE
+void
+_print_trace (void);
+void
+_print_trace (void)
+{
+  void *array[20];
+  size_t size;
+  char **strings;
+  size_t i;
+
+  size = backtrace (array, 20);
+  strings = backtrace_symbols (array, size);
+
+  printf ("Obtained %zd stack frames.\n", size);
+
+  for (i = 0; i < size; i++)
+     printf ("%s\n", strings[i]);
+
+  free (strings);
+}
+#endif
+*/
+
 typedef void (*nvme_tcp_qpair_xfer_complete_cb)(void *cb_arg);
 
 struct _nvme_tcp_sgl {
@@ -221,6 +284,8 @@ _update_crc32c_iov(struct iovec *iov, int iovcnt, uint32_t crc32c)
 static uint32_t
 nvme_tcp_pdu_calc_data_digest(struct nvme_tcp_pdu *pdu)
 {
+    _print_trace();
+    _print_func(nvme_tcp_pdu_calc_data_digest);
 	uint32_t crc32c = SPDK_CRC32C_XOR;
 	uint32_t mod;
 
@@ -366,6 +431,8 @@ static int
 nvme_tcp_build_iovs(struct iovec *iov, int iovcnt, struct nvme_tcp_pdu *pdu,
 		    bool hdgst_enable, bool ddgst_enable, uint32_t *_mapped_length)
 {
+    _print_trace();
+    _print_func(nvme_tcp_build_iovs);
 	uint32_t hlen, plen;
 	struct _nvme_tcp_sgl *sgl;
 
@@ -432,6 +499,8 @@ static int
 nvme_tcp_build_payload_iovs(struct iovec *iov, int iovcnt, struct nvme_tcp_pdu *pdu,
 			    bool ddgst_enable, uint32_t *_mapped_length)
 {
+    _print_trace();
+    _print_func(nvme_tcp_build_payload_iovs);
 	struct _nvme_tcp_sgl *sgl;
 
 	if (iovcnt == 0) {
@@ -468,6 +537,8 @@ static int
 nvme_tcp_read_data(struct spdk_sock *sock, int bytes,
 		   void *buf)
 {
+    _print_trace();
+    _print_func(nvme_tcp_read_data);
 	int ret;
 
 	ret = spdk_sock_recv(sock, buf, bytes);
@@ -495,6 +566,8 @@ nvme_tcp_read_data(struct spdk_sock *sock, int bytes,
 static int
 nvme_tcp_readv_data(struct spdk_sock *sock, struct iovec *iov, int iovcnt)
 {
+    _print_trace();
+    _print_func(nvme_tcp_read_data);
 	int ret;
 
 	assert(sock != NULL);
@@ -553,6 +626,8 @@ _nvme_tcp_pdu_set_data(struct nvme_tcp_pdu *pdu, void *data, uint32_t data_len)
 static void
 nvme_tcp_pdu_set_data(struct nvme_tcp_pdu *pdu, void *data, uint32_t data_len)
 {
+    _print_trace();
+    _print_func(nvme_tcp_read_data);
 	_nvme_tcp_pdu_set_data(pdu, data, data_len);
 	pdu->data_len = data_len;
 }
@@ -566,6 +641,8 @@ nvme_tcp_pdu_set_data_buf(struct nvme_tcp_pdu *pdu,
 	uint8_t *buf;
 	struct _nvme_tcp_sgl *pdu_sgl, buf_sgl;
 
+    _print_trace();
+    _print_func(nvme_tcp_read_data);
 	pdu->data_len = data_len;
 
 	if (spdk_likely(!pdu->dif_ctx)) {
@@ -611,6 +688,8 @@ static void
 nvme_tcp_pdu_calc_psh_len(struct nvme_tcp_pdu *pdu, bool hdgst_enable)
 {
 	uint8_t psh_len, pdo, padding_len;
+    _print_trace();
+    _print_func(nvme_tcp_read_data);
 
 	psh_len = pdu->hdr.common.hlen;
 

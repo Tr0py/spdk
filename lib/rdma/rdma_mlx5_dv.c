@@ -41,6 +41,15 @@
 #include "spdk_internal/rdma.h"
 #include "spdk_internal/log.h"
 
+#define _print_func(x)\
+{\
+    static printed = 0;\
+    if (printed == 0) {\
+        fprintf(stderr, "--In %s--\n", #x);\
+        printed = 1;\
+    }\
+}\
+
 struct spdk_rdma_mlx5_dv_qp {
 	struct spdk_rdma_qp common;
 	struct ibv_qp_ex *qpex;
@@ -49,6 +58,7 @@ struct spdk_rdma_mlx5_dv_qp {
 static int
 rdma_mlx5_dv_init_qpair(struct spdk_rdma_mlx5_dv_qp *mlx5_qp)
 {
+    _print_func(rdma_mlx5_dv_init_qpair);
 	struct ibv_qp_attr qp_attr;
 	int qp_attr_mask, rc;
 
@@ -96,6 +106,8 @@ rdma_mlx5_dv_init_qpair(struct spdk_rdma_mlx5_dv_qp *mlx5_qp)
 struct spdk_rdma_qp *
 spdk_rdma_qp_create(struct rdma_cm_id *cm_id, struct spdk_rdma_qp_init_attr *qp_attr)
 {
+
+    _print_func(spdk_rdma_qp_create);
 	assert(cm_id);
 	assert(qp_attr);
 
@@ -145,6 +157,7 @@ spdk_rdma_qp_create(struct rdma_cm_id *cm_id, struct spdk_rdma_qp_init_attr *qp_
 int
 spdk_rdma_qp_accept(struct spdk_rdma_qp *spdk_rdma_qp, struct rdma_conn_param *conn_param)
 {
+    _print_func(spdk_rdma_qp_accept);
 	struct spdk_rdma_mlx5_dv_qp *mlx5_qp;
 
 	assert(spdk_rdma_qp != NULL);
@@ -166,6 +179,7 @@ spdk_rdma_qp_accept(struct spdk_rdma_qp *spdk_rdma_qp, struct rdma_conn_param *c
 int
 spdk_rdma_qp_complete_connect(struct spdk_rdma_qp *spdk_rdma_qp)
 {
+    _print_func(spdk_rdma_qp_complete_connect);
 	struct spdk_rdma_mlx5_dv_qp *mlx5_qp;
 	int rc;
 
@@ -190,6 +204,7 @@ spdk_rdma_qp_complete_connect(struct spdk_rdma_qp *spdk_rdma_qp)
 void
 spdk_rdma_qp_destroy(struct spdk_rdma_qp *spdk_rdma_qp)
 {
+    _print_func(spdk_rdma_qp_destroy);
 	struct spdk_rdma_mlx5_dv_qp *mlx5_qp;
 	int rc;
 
@@ -215,6 +230,7 @@ int
 spdk_rdma_qp_disconnect(struct spdk_rdma_qp *spdk_rdma_qp)
 {
 	int rc = 0;
+    _print_func(spdk_rdma_qp_disconnect);
 
 	assert(spdk_rdma_qp != NULL);
 
@@ -242,6 +258,7 @@ bool
 spdk_rdma_qp_queue_send_wrs(struct spdk_rdma_qp *spdk_rdma_qp, struct ibv_send_wr *first)
 {
 	struct ibv_send_wr *tmp;
+    _print_func(spdk_rdma_qp_queue_send_wrs);
 	struct spdk_rdma_mlx5_dv_qp *mlx5_qp;
 	bool is_first;
 
@@ -291,6 +308,7 @@ spdk_rdma_qp_queue_send_wrs(struct spdk_rdma_qp *spdk_rdma_qp, struct ibv_send_w
 int
 spdk_rdma_qp_flush_send_wrs(struct spdk_rdma_qp *spdk_rdma_qp, struct ibv_send_wr **bad_wr)
 {
+    _print_func(spdk_rdma_qp_flush_send_wrs);
 	struct spdk_rdma_mlx5_dv_qp *mlx5_qp;
 	int rc;
 

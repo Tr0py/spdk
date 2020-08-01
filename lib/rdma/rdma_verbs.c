@@ -40,9 +40,18 @@
 #include "spdk_internal/rdma.h"
 #include "spdk_internal/log.h"
 
+#define _print_func(x);\
+{\
+    static int printed = 0;\
+    if (printed == 0) {\
+        fprintf(stderr, "--In %s--\n", #x);\
+        printed = 1;\
+    }\
+}
 struct spdk_rdma_qp *
 spdk_rdma_qp_create(struct rdma_cm_id *cm_id, struct spdk_rdma_qp_init_attr *qp_attr)
 {
+    _print_func(spdk_rdma_qp_create);
 	struct spdk_rdma_qp *spdk_rdma_qp;
 	int rc;
 	struct ibv_qp_init_attr attr = {
@@ -77,6 +86,7 @@ spdk_rdma_qp_create(struct rdma_cm_id *cm_id, struct spdk_rdma_qp_init_attr *qp_
 int
 spdk_rdma_qp_accept(struct spdk_rdma_qp *spdk_rdma_qp, struct rdma_conn_param *conn_param)
 {
+    _print_func(spdk_rdma_qp_accept);
 	assert(spdk_rdma_qp != NULL);
 	assert(spdk_rdma_qp->cm_id != NULL);
 
@@ -86,6 +96,7 @@ spdk_rdma_qp_accept(struct spdk_rdma_qp *spdk_rdma_qp, struct rdma_conn_param *c
 int
 spdk_rdma_qp_complete_connect(struct spdk_rdma_qp *spdk_rdma_qp)
 {
+    _print_func(spdk_rdma_qp_complete_connect);
 	/* Nothing to be done for Verbs */
 	return 0;
 }
@@ -93,6 +104,7 @@ spdk_rdma_qp_complete_connect(struct spdk_rdma_qp *spdk_rdma_qp)
 void
 spdk_rdma_qp_destroy(struct spdk_rdma_qp *spdk_rdma_qp)
 {
+    _print_func(spdk_rdma_qp_destroy);
 	assert(spdk_rdma_qp != NULL);
 
 	if (spdk_rdma_qp->send_wrs.first != NULL) {
@@ -109,6 +121,8 @@ spdk_rdma_qp_destroy(struct spdk_rdma_qp *spdk_rdma_qp)
 int
 spdk_rdma_qp_disconnect(struct spdk_rdma_qp *spdk_rdma_qp)
 {
+
+    _print_func(spdk_rdma_qp_disconnect);
 	int rc = 0;
 
 	assert(spdk_rdma_qp != NULL);
@@ -126,6 +140,7 @@ spdk_rdma_qp_disconnect(struct spdk_rdma_qp *spdk_rdma_qp)
 bool
 spdk_rdma_qp_queue_send_wrs(struct spdk_rdma_qp *spdk_rdma_qp, struct ibv_send_wr *first)
 {
+    _print_func(spdk_rdma_qp_queue_send_wrs);
 	struct ibv_send_wr *last;
 
 	assert(spdk_rdma_qp);
@@ -150,6 +165,7 @@ spdk_rdma_qp_queue_send_wrs(struct spdk_rdma_qp *spdk_rdma_qp, struct ibv_send_w
 int
 spdk_rdma_qp_flush_send_wrs(struct spdk_rdma_qp *spdk_rdma_qp, struct ibv_send_wr **bad_wr)
 {
+    _print_func(spdk_rdma_qp_flush_send_wrs);
 	int rc;
 
 	assert(spdk_rdma_qp);
